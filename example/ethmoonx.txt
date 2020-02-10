@@ -1,0 +1,32 @@
+https://etherscan.io/address/0x73104e9d3da91e410a6c211068f7bffabbbd3e26
+https://www.tokensets.com/set/ethmoonx
+
+Moonshot is an automated strategy that buys when RSI and volatility is high, sells
+when RSI and volatility is low, and otherwise holds its current position.
+
+Moonshot was given its name due to the fact that attempts to join strong bull trends
+that are starting to break out.  This strategy does not try to catch every small-medium
+price swing.
+
+I expect Moonshot to potentially underperform a buy-and-hold strategy in strongly
+bullish and sideways/choppy markets and overperform in bearish markets.  This strategy
+is designed to win the long game by holding a long position during strong bull markets,
+selling when the trend looks to be breaking down, and then buying back at a discount
+after the bear trend ends.   This is the pronounced compounding effects that can
+be seen in the backtest data.  This strategy also produced much lower portfolio
+volatility that a buy-and-hold.
+
+ETH Moonshot X uses the Moonshot algorithm with parameters that worked better with
+ETH in backtesting.
+
+DISCLAIMER: While this strategies backtesting results were very promising, it is
+important to understand that it has little live trading history.  By buying this
+set you are assuming the typical risk that is associated with any untested strategy.
+
+If you would like a more technical explanation of how the Moonshot algorithm works
+please check it out at https://medium.com/@aaronkruger/the-moonshot-strategy-explained-41a25e63aff
+
+If you are planning on buying this set then check out the following link
+https://medium.com/@aaronkruger/things-to-know-before-buying-a-moonshot-set-8cc18337a8ac
+
+Question or comments?  Joined my Discord channel https://discord.gg/QQYjVVR
