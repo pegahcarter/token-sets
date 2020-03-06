@@ -6,8 +6,9 @@ This repository contains all code used with [Token Sets](https://tokensets.com).
 
 ### Parameters
 * Timeframe used for backtests
-  * Start date: 2017.07.14 00:00:00
-  * End date: 2020.02.29 23:00:00
+  * Start date: 2017.01.01 00:00:00 (UTC)
+  * End date: 2020.02.29 23:30:00 (UTC)
+* Exchange used for OHLCV data:  Poloniex
 
 
 ### Directories
