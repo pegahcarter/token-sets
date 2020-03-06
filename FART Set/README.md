@@ -1,7 +1,13 @@
 ## FART-Set
 
-### Introduction
+### Intro
 This repository contains all code for backtesting for the [FART Set](https://set-beta.tokensets.com/set/fart).
+
+#### Description
+* Find long/short signals for ETH/BTC
+  * Long = Buy ETH and Sell BTC
+  * Short = Buy BTC and Sell ETH
+
 
 ### Directories
 * Backtests
@@ -9,6 +15,10 @@ This repository contains all code for backtesting for the [FART Set](https://set
 
 
 ### To-Do
-* [ ] Determine time frame for candlesticks
+* [x] Pick time frame for candlesticks (4h)
+* [ ] Create signals
+* [ ] Compare signal performance
+* [ ] Figure out
 * [ ] Add slippage / fees
 * [ ] Determine relationship of ETH to BTC to DAI
+* [ ] How long to keep a trade open?
