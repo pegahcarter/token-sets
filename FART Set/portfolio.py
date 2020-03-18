@@ -1,25 +1,22 @@
+import pandas as pd
+import numpy as np
+
 
 
 class Portfolio:
 
-    coins = ['ETH', 'BTC', 'DAI']
-    initial_capital = 100
-    trade_count = 0
-    slippage = 0
+    INITIAL_CAPITAL = 10000
+    SLIPPAGE = 0.008
 
-    def __init__(self, *args, **kwargs):
-        self.available_capital = self.initial_capital
-        self.positions = []
+    def __init__(self, coins):
 
+        self.coins = coins
+        hist_prices = pd.read_csv('../data/combined.csv', usecols=['date'] + coins)
+        self.dates = hist_prices.pop('date').tolist()
+        self.hist_prices = hist_prices.values
+        prices = self.hist_prices[0]
+        amt_each = self.INITIAL_CAPITAL / len(coins)
+        units = np.divide(amt_each, prices)
 
-    # Add slippage
-    def calc_slippage(self, *args, **kwargs):
-        pass
-
-    # Open a position
-    def open(self, *args, **kwargs):
-        pass
-
-    # Close a position
-    def close(self, *args, **kwargs):
-        pass
+        self.start_units = units
+        self.units = units
