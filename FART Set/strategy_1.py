@@ -9,6 +9,12 @@ from portfolio import Portfolio
 
 
 coins = ['ETH', 'DAI']
+allocations = {
+    'bull': [75, 25],
+    'neutral': [50, 50],
+    'bear': [25, 75]
+}
+
 
 p = Portfolio(coins)
 p.start_units
@@ -43,11 +49,13 @@ for i in rebalance_indices:
 # ------------------------------------------------------------------------------
 # this section to figure out how to complete first rebalance
 # NOTE: 'bull' = 75% allocated to ETH
+
 signal_0 = list(signals.items())[0]
 index, signal = signal_0
 
-# Figure out weighting based on current dollar value
-d_vals = p.units * p.hist_prices[index]
+# Figure out weighting based on current prices
+current_prices = p.hist_prices[index]
+d_vals = p.units * current_prices
 
 weights_current = d_vals / sum(d_vals)
 weight_current_eth, weight_current_dai = weights_current
@@ -55,17 +63,16 @@ weight_current_eth, weight_current_dai = weights_current
 weights_bull = [0.75, 0.25]
 weight_bull_eth, weight_bull_dai = weights_bull
 
-trade_weight = (weight_bull_eth - weight_current_eth) / 2
-trade_dval = trade_weight * sum(d_vals)
-
 
 trade_weights = (weights_bull - weights_current) / 2
 trade_dvals = trade_weights * sum(d_vals)
+trade_units = trade_dvals / current_prices
 
+# Divide slippage by two to account for 50% slippage on each side
+trade_units_after_slippage = (1 - p.SLIPPAGE/2) * trade_units
 
-
-delta_per_weight * sum(d_vals)
-
+# Add/subtract trade units to total units
+p.units += trade_units_after_slippage
 
 
 
