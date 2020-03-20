@@ -9,10 +9,11 @@ from portfolio import Portfolio
 
 
 coins = ['ETH', 'DAI']
+wiggle_room = 0.05
 allocations = {
-    'bull': [75, 25],
-    'neutral': [50, 50],
-    'bear': [25, 75]
+    'bull': [0.75, 0.25],
+    'neutral': [0.50, 0.50],
+    'bear': [0.25, 0.75]
 }
 
 
@@ -36,45 +37,49 @@ sma_fast = sma(prices['ETH'], n=50)
 bullish = (sma_fast > sma_mid) & (sma_mid > sma_slow)
 bearish = (sma_fast < sma_mid) & (sma_mid < sma_slow)
 
-# Record result at each rebalance period
 signals = {}
-for i in rebalance_indices:
-    if bullish[i]:
-        signals[i] = 'bull'
-    elif bearish[i]:
-        signals[i] = 'bear'
+trade_count = 0
+
+for index in rebalance_indices:
+
+    # Determine signal
+    if bullish[index]:
+        signal = 'bull'
+    elif bearish[index]:
+        signal = 'bear'
     else:
-        signals[i] = 'neutral'
+        signal = 'neutral'
+    signals[index] = signal
 
-# ------------------------------------------------------------------------------
-# this section to figure out how to complete first rebalance
-# NOTE: 'bull' = 75% allocated to ETH
+    # Calculate weighting based on current prices
+    current_prices = p.hist_prices[index]
+    dollar_values = p.units * current_prices
 
-signal_0 = list(signals.items())[0]
-index, signal = signal_0
+    weights_current = dollar_values / sum(dollar_values)
+    weights_preferred = allocations[signal]
 
-# Figure out weighting based on current prices
-current_prices = p.hist_prices[index]
-d_vals = p.units * current_prices
+    # Calculate weight to trade on each side
+    trade_weights = (weights_preferred - weights_current) / 2
+    is_trade_actionable = sum(abs(trade_weight) > wiggle_room for trade_weight in trade_weights) == len(coins)
 
-weights_current = d_vals / sum(d_vals)
-weight_current_eth, weight_current_dai = weights_current
+    if is_trade_actionable:
 
-weights_bull = [0.75, 0.25]
-weight_bull_eth, weight_bull_dai = weights_bull
+        trade_dollar_values = trade_weights * sum(dollar_values)
 
+        trade_units = trade_dollar_values / current_prices
+        # NOTE: Divide slippage by two to account for 50% slippage on each side
+        trade_units_after_slippage = (1 - p.SLIPPAGE / 2) * trade_units
 
-trade_weights = (weights_bull - weights_current) / 2
-trade_dvals = trade_weights * sum(d_vals)
-trade_units = trade_dvals / current_prices
-
-# Divide slippage by two to account for 50% slippage on each side
-trade_units_after_slippage = (1 - p.SLIPPAGE/2) * trade_units
-
-# Add/subtract trade units to total units
-p.units += trade_units_after_slippage
+        p.units += trade_units_after_slippage
+        trade_count += 1
 
 
+# Compare portfolio start_units ending dollar value vs rebalanced units
+end_prices = p.hist_prices[-1]
 
-
-# ------------------------------------------------------------------------------
+# End value of 50/50
+sum(p.start_units * end_prices)
+# End value of 100% ETH
+p.start_units[0]*2 * end_prices[0]
+# End value of rebalanced
+sum(p.units * end_prices)
