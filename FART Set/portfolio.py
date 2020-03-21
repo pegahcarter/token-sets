@@ -12,11 +12,12 @@ class Portfolio:
 
         self.coins = coins
         hist_prices = pd.read_csv('../data/combined.csv', usecols=['date'] + coins)
-        self.dates = hist_prices.pop('date').tolist()
+        self.dates = hist_prices.pop('date')
         self.hist_prices = hist_prices.values
         prices = self.hist_prices[0]
         amt_each = self.INITIAL_CAPITAL / len(coins)
         units = np.divide(amt_each, prices)
 
-        self.start_units = units
+        self.start_prices = prices
+        self.start_units = units.copy()
         self.units = units
