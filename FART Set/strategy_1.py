@@ -16,9 +16,31 @@ allocations = {
     'bear': [0.25, 0.75]
 }
 
+prices = pd.read_csv('../data/combined.csv')
+
+
+class Portfolio:
+
+    INITIAL_CAPITAL = 10000
+    SLIPPAGE = 0.008
+
+    def __init__(self, coins):
+
+        self.coins = coins
+        hist_prices = pd.read_csv('../data/prices.csv', usecols=['date'] + coins)
+        self.dates = hist_prices.pop('date')
+        self.hist_prices = hist_prices.values
+        prices = self.hist_prices[0]
+        amt_each = self.INITIAL_CAPITAL / len(coins)
+        units = np.divide(amt_each, prices)
+
+        self.start_prices = prices
+        self.start_units = units.copy()
+        self.units = units
+
+        self.trade_count = 0
 
 p = Portfolio(coins)
-p.start_units
 
 
 # Indices of rebalancing - used first index to test
@@ -27,7 +49,6 @@ rebalance_indices = np.where(rebalance)[0]
 
 
 # Load prices for our own testing
-prices = pd.read_csv('../data/combined.csv')
 
 sma_slow = sma(prices['ETH'], n=200)
 sma_mid = sma(prices['ETH'], n=100)
@@ -67,11 +88,11 @@ for index in rebalance_indices:
         trade_dollar_values = trade_weights * sum(dollar_values)
 
         trade_units = trade_dollar_values / current_prices
-        # NOTE: Divide slippage by two to account for 50% slippage on each side
-        trade_units_after_slippage = (1 - p.SLIPPAGE / 2) * trade_units
+        # apply slippage to side purchased
+        trade_units_after_slippage = [(1 - p.SLIPPAGE) * t else t for t in trade_units]
 
         p.units += trade_units_after_slippage
-        trade_count += 1
+        p.trade_count += 1
 
 
 # Compare portfolio start_units ending dollar value vs rebalanced units
