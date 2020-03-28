@@ -6,7 +6,7 @@ from TAcharts.indicators import sma
 
 from is_rebalance import is_rebalance
 from portfolio import Portfolio
-
+from signals import signals
 
 coins = ['ETH', 'DAI']
 wiggle_room = 0.05
@@ -16,7 +16,7 @@ allocations = {
     'bear': [0.25, 0.75]
 }
 
-prices = pd.read_csv('../data/combined.csv')
+prices = pd.read_csv('../data/prices.csv')
 
 
 class Portfolio:
@@ -45,32 +45,12 @@ p = Portfolio(coins)
 
 # Indices of rebalancing - used first index to test
 rebalance = is_rebalance(p.dates, weekday='Saturday', hour=10)
-rebalance_indices = np.where(rebalance)[0]
+
+rebalance_signals = signals(prices['ETH'], rebalance, 50, 100, 200)
 
 
-# Load prices for our own testing
 
-sma_slow = sma(prices['ETH'], n=200)
-sma_mid = sma(prices['ETH'], n=100)
-sma_fast = sma(prices['ETH'], n=50)
-
-# Determine if ETH/BTC is bullish/bearish based on moving average support/resistance
-bullish = (sma_fast > sma_mid) & (sma_mid > sma_slow)
-bearish = (sma_fast < sma_mid) & (sma_mid < sma_slow)
-
-signals = {}
-trade_count = 0
-
-for index in rebalance_indices:
-
-    # Determine signal
-    if bullish[index]:
-        signal = 'bull'
-    elif bearish[index]:
-        signal = 'bear'
-    else:
-        signal = 'neutral'
-    signals[index] = signal
+for index, signal in rebalance_signals.items():
 
     # Calculate weighting based on current prices
     current_prices = p.hist_prices[index]
@@ -89,9 +69,10 @@ for index in rebalance_indices:
 
         trade_units = trade_dollar_values / current_prices
         # apply slippage to side purchased
-        trade_units_after_slippage = [(1 - p.SLIPPAGE) * t else t for t in trade_units]
+        # trade_units_after_slippage = [(1 - p.SLIPPAGE) * t else t for t in trade_units]
 
-        p.units += trade_units_after_slippage
+        # p.units += trade_units_after_slippage
+        p.units += trade_units
         p.trade_count += 1
 
 
