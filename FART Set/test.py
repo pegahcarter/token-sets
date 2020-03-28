@@ -1,6 +1,7 @@
 # Testing out weighting
 import pandas as pd
 import numpy as np
+import itertools
 
 from TAcharts.indicators import sma, rolling, rsi
 from TAcharts.utils import apply_across
@@ -17,28 +18,8 @@ rebalance = is_rebalance(prices['date'], weekday='Saturday', hour=10)
 rebalance_indices = np.flatnonzero(rebalance)
 
 
-ma_50 = sma(prices['ETH'], n=50)
-ma_100 = sma(prices['ETH'], n=100)
-ma_200 = sma(prices['ETH'], n=200)
-
-bullish = (ma_50 > ma_100) & (ma_100 > ma_200)
-# bullish_2 = rsi(prices['ETH'], n=14) > 50
-bearish = (ma_50 < ma_100) & (ma_100 < ma_200)
-
-# bull_trades = signals(rebalance, bullish)
-# bear_trades = signals(rebalance, bearish)
-
-# Bullish signals
-%timeit bull_indices = np.flatnonzero(apply_across(rebalance, bullish, fn='min'))
-
-bear_indices = np.flatnonzero(apply_across(rebalance, bearish, fn='min'))
 
 
-
-
-
-
-len(bullish)
 
 
 
