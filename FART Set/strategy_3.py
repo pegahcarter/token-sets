@@ -20,73 +20,40 @@ test = list(range(11))
 overlap = 3
 window_len = 5
 
-for i in range(0, len(test) - window_len, overlap - 1):
+for i in range(0, len(test) - window_len + 1, overlap - 1):
     print(test[i:i+window_len])
-
-
-
-
 
 # -----------------------------------
 # Option 2
 overlap = 3
-num_windows = 2
+num_windows = 3
 
-window_len = int((len(test) + overlap * (num_windows - 1)) / num_windows)
+window_len = (len(test) + (overlap - 1) * num_windows) // num_windows
 
-for i in range(0, len(test) - window_len + 1, overlap + 1):
+for i in range(0, len(test) - window_len + 1, overlap - 1):
     print(test[i:i+window_len])
 
 # -----------------------------------
-# Option 3
+# Option 3 - TODO:
 # NOTE: windows might not overlap - raise an Exception
 num_windows = 3
 window_len = 5
 
-overlap = int((window_len * num_windows - len(test)) / (num_windows - 1))
+# TODO: fix the math behind this
+overlap = (window_len * num_windows - len(test)) // (num_windows - 1)
 
-for i in range(0, len(test) - window_len + 1, overlap + 1):
+for i in range(0, len(test) - window_len, overlap - 1):
     print(test[i:i+window_len])
 
-
-
-
 # ------------------------------------------------------------------------------
-# First function to wrap all three options
+# First function to wrap option 1
 
-def foo(myList, overlap=None, num_windows=None, window_len=None):
+def foo(array, overlap, window_len):
 
-    if [overlap, num_windows, window_len].count(None) > 1:
-        raise Exception('Must enter two keyword arguments')
-
-    if overlap is None:
-        overlap = int((window_len * num_windows - len(myList)) / (num_windows - 1))
-        if overlap < 0:
-            raise Exception('Error: no overlap in prices')
-
-    if window_len is None:
-        window_len = int((len(myList) + overlap * (num_windows - 1)) / num_windows)
-
-    for x in range(0, len(myList) - window_len, overlap - 1):
-        print(myList[x:x+window_len])
+    for x in range(0, len(array) - window_len + 1, overlap - 1):
+        print(array[x:x+window_len])
 
 
-foo(test, overlap=3, window_len=5)
+df = prices[:10]
 
-foo(test, num_windows=3, window_len=5)
-
-
-
-
-
-
-
-def foo(myList, **kwargs):
-    #
-    # if len(set(['overlap', 'num_windows', 'window_len']) - set(kwargs)) > 1:
-    #     raise Exception('Enter at least two of the following keyword arguments: overlap, num_windows', 'window_len')
-    #
-    # if 'window_len' not in kwargs:
-    #     kwargs['window_len'] = int((len(myList) + kwargs['overlap'] * (kwargs['num_windows'] - 1)))
-    # elif 'overlap' not in kwargs:
-    #     kwargs['overlap']
+foo(df, overlap=3, window_len=5)
