@@ -11,11 +11,7 @@ from portfolio import Portfolio
 from signals import signals
 from variables import *
 
-df = pd.read_csv('../data/rebalance_signals.csv')
-df['date'] = pd.to_datetime(df['date'])
 
-
-# ------------------------------------------------------------------------------
 class Portfolio:
 
     INITIAL_CAPITAL = 10000
@@ -66,7 +62,7 @@ def simulate(coins, df):
             trade_dollar_values = trade_weights * sum(dollar_values)
             trade_units = trade_dollar_values / current_prices
             trade_units_after_slippage = [
-                (1-portfolio.SLIPPAGE)*t else t for t in trade_units if t > 0
+                (1-portfolio.SLIPPAGE)*t if t > 0 else t for t in trade_units
             ]
 
             portfolio.units += trade_units
@@ -75,14 +71,17 @@ def simulate(coins, df):
     end_prices = df[coins].iloc[-1]
 
     # End of non-rebalanced portfolio
-    end_val_nonrebalanced = sum(p.start_units * end_prices)
-    end_val_rebalanced = sum(p.units * end_prices)
+    end_val_nonrebalanced = sum(portfolio.start_units * end_prices)
+    end_val_rebalanced = sum(portfolio.units * end_prices)
 
     return (end_val_rebalanced - end_val_nonrebalanced) / end_val_nonrebalanced
 
 # ------------------------------------------------------------------------------
 
-df
+
+df = pd.read_csv('../data/rebalance_signals.csv')
+df['date'] = pd.to_datetime(df['date'])
+
 # Figuring out how to split up prices dataset
 day_diff = df['date'].iat[-1] - df['date'].iat[0]
 
@@ -93,19 +92,14 @@ overlap = 24 * 50
 
 dfs = split_df(df, overlap, window_len)
 
-df
 p = simulate(coins, dfs[0])
 
-p
-p .start_units
 
-p.units
-
-df
-
+print(p)
 
 
 # ------------------------------------------------------------------------------
+# NOTE: testing below
 # Create rolling window from a list
 
 test = list(range(11))
