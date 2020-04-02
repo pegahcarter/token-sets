@@ -11,12 +11,30 @@ from portfolio import Portfolio
 from signals import signals
 from variables import *
 
-prices = pd.read_csv('../data/prices.csv')
-prices['date'] = pd.to_datetime(prices['date'])
+df = pd.read_csv('../data/rebalance_signals.csv')
+df['date'] = pd.to_datetime(df['date'])
+
+
+# ------------------------------------------------------------------------------
+class Portfolio:
+
+    INITIAL_CAPITAL = 10000
+    SLIPPAGE = 0.006
+
+    def __init__(self, coins, start_prices):
+
+        amt_each = self.INITIAL_CAPITAL / len(coins)
+        units = np.divide(amt_each, start_prices)
+
+        self.start_prices = start_prices
+        self.units = units
+        self.start_units = units.copy()
+
+        self.trade_count = 0
+
 
 # First function to wrap option 1
-
-def foo(array, overlap, window_len):
+def split_df(array, overlap, window_len):
 
     array_split = []
 
@@ -26,18 +44,64 @@ def foo(array, overlap, window_len):
     return array_split
 
 
+# Simulate function
+def simulate(coins, df):
+
+    start_prices = df[coins].iloc[0]
+    portfolio = Portfolio(coins, start_prices)
+
+    for index, row in df.dropna().iterrows():
+
+        # Weighting based on current prices
+        current_prices = row[coins]
+        dollar_values = portfolio.units * current_prices
+
+        weights_current = dollar_values / sum(dollar_values)
+        weights_preferred = allocations[row['signal']]
+
+        trade_weights = (weights_preferred - weights_current) / 2
+        is_trade_actionable = sum(abs(trade_weight) > wiggle_room for trade_weight in trade_weights) == len(coins)
+
+        if is_trade_actionable:
+            trade_dollar_values = trade_weights * sum(dollar_values)
+            trade_units = trade_dollar_values / current_prices
+            trade_units_after_slippage = [
+                (1-portfolio.SLIPPAGE)*t else t for t in trade_units if t > 0
+            ]
+
+            portfolio.units += trade_units
+            portfolio.trade_count += 1
+
+    end_prices = df[coins].iloc[-1]
+
+    # End of non-rebalanced portfolio
+    end_val_nonrebalanced = sum(p.start_units * end_prices)
+    end_val_rebalanced = sum(p.units * end_prices)
+
+    return (end_val_rebalanced - end_val_nonrebalanced) / end_val_nonrebalanced
+
+# ------------------------------------------------------------------------------
+
+df
 # Figuring out how to split up prices dataset
-day_diff = prices['date'].iat[-1] - prices['date'].iat[0]
+day_diff = df['date'].iat[-1] - df['date'].iat[0]
 
 # Let's say we want 100 day windows with 50 day overlap
 # Well, since we're using hours, let's convert into days and go that way
 window_len = 24 * 100
 overlap = 24 * 50
 
-test = foo(prices, overlap, window_len)
-len(test)
+dfs = split_df(df, overlap, window_len)
 
+df
+p = simulate(coins, dfs[0])
 
+p
+p .start_units
+
+p.units
+
+df
 
 
 
