@@ -43,12 +43,12 @@ def split_df(array, overlap, window_len):
 
 
 # Simulate function
-def simulate(coins, allocations, df):
+def simulate(coins, allocations, wiggle_room, df):
 
     start_prices = df[coins].iloc[0]
     portfolio = Portfolio(coins, start_prices)
 
-    for index, row in df.dropna().iterrows():
+    for index, row in df[df['rebalance']].iterrows():
 
         # Weighting based on current prices
         current_prices = row[coins]
@@ -84,7 +84,6 @@ def simulate(coins, allocations, df):
 df = pd.read_csv('../backtests/example.csv')
 df['date'] = pd.to_datetime(df['date'])
 
-
 # Let's say we want 100 day windows with 50 day overlap
 # Well, since we're using hours, let's convert into days and go that way
 window_len = 24 * 100
@@ -92,32 +91,30 @@ overlap = 24 * 50
 
 dfs = split_df(df, overlap, window_len)
 
-df_0 = dfs[0]
+
+mydict = {}
+
+sum(mydict.values())
 
 
-
-type(df_0['date'].iat[0])
-
-datetime.strftime(df_0['date'].iat[0])
+results = []
 
 
-p = simulate(coins, allocations, dfs[0])
+for allocation in allocations_lst:
+    for wiggle_room in wiggle_room_lst:
+        result = {
+            'wiggle_room': wiggle_room,
+            'allocation': '/'.join(str(x) for x in allocation['bull']),
+        }
 
+        # Add result for each split dataframe
+        for df_split in dfs:
+            start = datetime.strftime(df_split['date'].iat[0], '%Y.%m.%d')
+            end = datetime.strftime(df_split['date'].iat[-1], '%Y.%m.%d')
 
+            performance = simulate(coins, allocations, wiggle_room, df_split)
 
-bull_allocations = [
-    [0.90, 0.10],
-    [0.85, 0.15],
-    [0.80, 0.20],
-    [0.75, 0.25],
-    [0.70, 0.30],
-    [0.65, 0.35],
-    [0.60, 0.40]
-]
-allocations_lst = [{'bull': b,
-                   'neutral': [0.50, 0.50],
-                   'bear': b[::-1]}
-                  for b in bull_allocations]
+            result[start + ' - ' + end] = performance
 
-
-print(p)
+        # Save result to results
+        results.append(result)
