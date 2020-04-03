@@ -1,4 +1,4 @@
-date,rebalance,signal,ETH,USD
+date,rebalance,signal,ETH,DAI
 2019-01-01 00:00:00,False,neutral,132.74,1
 2019-01-01 01:00:00,False,neutral,133.36,1
 2019-01-01 02:00:00,False,neutral,133.56,1
