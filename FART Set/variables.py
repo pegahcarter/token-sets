@@ -4,15 +4,8 @@ import numpy as np
 
 coins = ['ETH', 'DAI']
 
-# prices = pd.read_csv('../data/ETH-USDT.csv', usecols=['date', 'open']).rename({'open': 'ETH'}, axis=1)
-# prices['DAI'] = 1
 
-# coin_prices = prices[coins].values
-# start_prices = coin_prices[0]
-# end_prices = coin_prices[-1]
-
-
-bull_allocations = [
+bull_allocation = [
     [0.90, 0.10],
     [0.85, 0.15],
     [0.80, 0.20],
@@ -22,14 +15,14 @@ bull_allocations = [
     [0.60, 0.40]
 ]
 
-allocations_lst = [{'bull': b,
+allocation_lst = [{'bull': b,
                    'neutral': [0.50, 0.50],
                    'bear': b[::-1]}
                   for b in bull_allocations]
 
 
 
-allocations = {
+allocation = {
     'bull': [0.75, 0.25],
     'neutral': [0.50, 0.50],
     'bear': [0.25, 0.75]
