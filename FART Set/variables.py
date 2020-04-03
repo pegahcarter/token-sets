@@ -35,7 +35,6 @@ allocations = {
     'bear': [0.25, 0.75]
 }
 
-wiggle_room = 0.05
-wiggle_room_lst = np.arange(0, 0.06, 0.01)
+wiggle_room_lst = np.arange(0, 0.17, 0.02)
 
 moving_averages = [50, 100, 200]

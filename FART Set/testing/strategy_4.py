@@ -4,15 +4,6 @@ import pandas as pd
 import numpy as np
 from datetime import datetime
 
-coins = ['ETH', 'DAI']
-allocations = {
-    'bull': [0.75, 0.25],
-    'neutral': [0.50, 0.50],
-    'bear': [0.25, 0.75]
-}
-wiggle_room = 0.05
-
-
 
 class Portfolio:
 
@@ -43,7 +34,7 @@ def split_df(array, overlap, window_len):
 
 
 # Simulate function
-def simulate(coins, allocations, wiggle_room, df):
+def simulate(coins, allocation, wiggle_room, df):
 
     start_prices = df[coins].iloc[0]
     portfolio = Portfolio(coins, start_prices)
@@ -55,10 +46,10 @@ def simulate(coins, allocations, wiggle_room, df):
         dollar_values = portfolio.units * current_prices
 
         weights_current = dollar_values / sum(dollar_values)
-        weights_preferred = allocations[row['signal']]
+        weights_preferred = allocation[row['signal']]
 
         trade_weights = (weights_preferred - weights_current) / 2
-        is_trade_actionable = sum(abs(trade_weight) > wiggle_room for trade_weight in trade_weights) == len(coins)
+        is_trade_actionable = max(trade_weights) > wiggle_room
 
         if is_trade_actionable:
             trade_dollar_values = trade_weights * sum(dollar_values)
@@ -80,7 +71,6 @@ def simulate(coins, allocations, wiggle_room, df):
 
 # ------------------------------------------------------------------------------
 
-
 df = pd.read_csv('../backtests/example.csv')
 df['date'] = pd.to_datetime(df['date'])
 
@@ -92,15 +82,9 @@ overlap = 24 * 50
 dfs = split_df(df, overlap, window_len)
 
 
-mydict = {}
-
-sum(mydict.values())
-
-
 results = []
 
-
-for allocation in allocations_lst:
+for allocation in allocation_lst:
     for wiggle_room in wiggle_room_lst:
         result = {
             'wiggle_room': wiggle_room,
@@ -112,9 +96,16 @@ for allocation in allocations_lst:
             start = datetime.strftime(df_split['date'].iat[0], '%Y.%m.%d')
             end = datetime.strftime(df_split['date'].iat[-1], '%Y.%m.%d')
 
-            performance = simulate(coins, allocations, wiggle_room, df_split)
+            performance = simulate(coins, allocation, wiggle_room, df_split)
 
             result[start + ' - ' + end] = performance
 
         # Save result to results
         results.append(result)
+
+
+df_results = pd.DataFrame.from_records(results)
+df_results['sum'] = df_results.drop(['wiggle_room', 'allocation'], axis=1).sum(axis=1)
+
+# Save dataframe
+df_results.to_csv('../backtests/performance-compounded.csv', index=False)
