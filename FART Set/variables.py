@@ -1,5 +1,4 @@
 # Common variables used
-import pandas as pd
 import numpy as np
 
 # Coins traded
