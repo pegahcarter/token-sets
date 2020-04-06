@@ -9,13 +9,11 @@ moving_averages = [50, 100, 200]
 
 # Potential ETH to DAI allocations from bullish signals
 bull_allocation = [
-    [0.90, 0.10],
     [0.85, 0.15],
     [0.80, 0.20],
     [0.75, 0.25],
     [0.70, 0.30],
-    [0.65, 0.35],
-    [0.60, 0.40]
+    [0.65, 0.35]
 ]
 
 # List of allocations used, with the inverse allocation for bearish signals

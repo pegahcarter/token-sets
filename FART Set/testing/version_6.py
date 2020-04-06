@@ -1,5 +1,5 @@
 # Version 6
-# Optimize code from pandas DataFrame to dict
+# Optimize code from pandas DataFrame to dict and compare results to ETH
 import pandas as pd
 import numpy as np
 from datetime import datetime
@@ -39,7 +39,7 @@ def simulate(coins, allocation, wiggle_room, df):
     start_prices = [df[0][coin] for coin in coins]
     portfolio = Portfolio(coins, start_prices)
 
-    nonrebalanced_netval = []
+    eth_netval = []
     rebalanced_netval = []
 
     for index, row in enumerate(df):
@@ -65,10 +65,10 @@ def simulate(coins, allocation, wiggle_room, df):
                 portfolio.units += trade_units
 
         # Append net_dollar_value
-        nonrebalanced_netval.append(sum(current_prices * portfolio.start_units))
         rebalanced_netval.append(net_dollar_value)
+        eth_netval.append(portfolio.start_units[coins.index('ETH')] * len(coins) * current_prices[coins.index('ETH')])
 
-    cum_performance = sum(np.subtract(rebalanced_netval, nonrebalanced_netval) / nonrebalanced_netval)
+    cum_performance = sum(np.subtract(rebalanced_netval, eth_netval) / eth_netval)
 
     return cum_performance
 
@@ -114,6 +114,8 @@ for allocation in allocation_lst:
 df_results = pd.DataFrame.from_records(results)
 df_results['sum'] = df_results.drop(['wiggle_room', 'allocation'], axis=1).sum(axis=1)
 
+
+df_results.sort_values('sum', ascending=False)[:15]
 
 # Save dataframe
 df_results.to_csv('../backtests/performance-cumulative.csv', index=False)
