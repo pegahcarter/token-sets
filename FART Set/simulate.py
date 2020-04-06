@@ -1,18 +1,19 @@
 # Simulate rebalancing
 from portfolio import Portfolio
+import numpy as np
 
 
-def simulate(coins, allocation, wiggle_room, df):
+def simulate(assets, allocation, wiggle_room, df):
 
-    start_prices = [df[0][coin] for coin in coins]
-    portfolio = Portfolio(coins, start_prices)
+    start_prices = [df[0][a] for a in assets]
+    portfolio = Portfolio(assets, start_prices)
 
     eth_netval = []
     rebalanced_netval = []
 
     for index, row in enumerate(df):
 
-        current_prices = [df[index][coin] for coin in coins]
+        current_prices = [df[index][a] for a in assets]
         dollar_values = portfolio.units * current_prices
         net_dollar_value = sum(dollar_values)
 
@@ -34,7 +35,7 @@ def simulate(coins, allocation, wiggle_room, df):
 
         # Append net_dollar_value
         rebalanced_netval.append(net_dollar_value)
-        eth_netval.append(portfolio.start_units[coins.index('ETH')] * len(coins) * current_prices[coins.index('ETH')])
+        eth_netval.append(portfolio.start_units[assets.index('ETH')] * len(assets) * current_prices[assets.index('ETH')])
 
     # Take the cumulative distance between rebalanced and nonrebalanced portfolios
     cum_performance = sum(np.subtract(rebalanced_netval, eth_netval) / eth_netval)
