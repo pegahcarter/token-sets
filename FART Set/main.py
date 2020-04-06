@@ -10,10 +10,10 @@ from simulate import simulate
 # ------------------------------------------------------------------------------
 # VARIABLES
 
-# We want 100 day windows with 75 day overlap
+# We want 150 day windows with 125 day overlap
 # Since our dataframe is in hours, multiply by 24
-window_len = 24 * 100
-overlap = 24 * 75
+window_len = 24 * 150
+overlap = 24 * 125
 
 # Assets traded
 assets = ['ETH', 'USD']
@@ -46,12 +46,14 @@ wiggle_room_lst = np.arange(0, 0.21, 0.02)
 
 def main():
 
-    df = pd.read_csv('../data/ETH.csv', usecols=['date', 'close']).rename({'close':'ETH'}, axis=1)
+    df = pd.read_csv('../data/ETH-USDT.csv', usecols=['date', 'close']).rename({'close':'ETH'}, axis=1)
     df['date'] = pd.to_datetime(df['date'])
     df['USD'] = 1
 
     df['rebalance'] = is_rebalance(df['date'])
     df['signal'] = signals(df['ETH'], df['rebalance'], *moving_averages)
+
+    df.to_csv('backtests/signals.csv', index=False)
 
     df = df.to_dict(orient='records')
     dfs = split_df(df, overlap, window_len)
