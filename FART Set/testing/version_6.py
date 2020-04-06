@@ -70,7 +70,7 @@ def simulate(coins, allocation, wiggle_room, df):
 
     cum_performance = sum(np.subtract(rebalanced_netval, eth_netval) / eth_netval)
 
-    return cum_performance
+    return rebalanced_netval, eth_netval, cum_performance
 
 
 # ------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ for allocation in allocation_lst:
             start = datetime.strftime(df_split[0]['date'], '%Y.%m.%d')
             end = datetime.strftime(df_split[-1]['date'], '%Y.%m.%d')
 
-            performance = simulate(coins, allocation, wiggle_room, df_split)
+            _, _, performance = simulate(coins, allocation, wiggle_room, df_split)
 
             result[start + ' - ' + end] = performance
 
