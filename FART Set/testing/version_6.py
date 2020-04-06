@@ -36,13 +36,15 @@ def split_df(array, overlap, window_len):
 # Simulate function
 def simulate(coins, allocation, wiggle_room, df):
 
-    start_prices = df[0][coins].iloc[0]
+    start_prices = [df[0][coin] for coin in coins]
     portfolio = Portfolio(coins, start_prices)
+
+    nonrebalanced_netval = []
     rebalanced_netval = []
 
-    for index, row in df.iterrows():
+    for index, row in enumerate(df):
 
-        current_prices = row[coins]
+        current_prices = [df[index][coin] for coin in coins]
         dollar_values = portfolio.units * current_prices
         net_dollar_value = sum(dollar_values)
 
@@ -63,15 +65,16 @@ def simulate(coins, allocation, wiggle_room, df):
                 portfolio.units += trade_units
 
         # Append net_dollar_value
+        nonrebalanced_netval.append(sum(current_prices * portfolio.start_units))
         rebalanced_netval.append(net_dollar_value)
 
-    nonrebalanced_netval = (portfolio.start_units * df[coins]).sum(axis=1)
-    cum_performance = sum((rebalanced_netval - nonrebalanced_netval) / nonrebalanced_netval)
+    cum_performance = sum(np.subtract(rebalanced_netval, nonrebalanced_netval) / nonrebalanced_netval)
 
     return cum_performance
 
 
-# ----------------------------------
+# ------------------------------------------------------------------------------
+
 df = pd.read_csv('../backtests/example.csv')
 df['date'] = pd.to_datetime(df['date'])
 # Convert to list of dicts
@@ -105,3 +108,12 @@ for allocation in allocation_lst:
 
         # Save result to results
         results.append(result)
+
+
+# Convert dict to dataframe
+df_results = pd.DataFrame.from_records(results)
+df_results['sum'] = df_results.drop(['wiggle_room', 'allocation'], axis=1).sum(axis=1)
+
+
+# Save dataframe
+df_results.to_csv('../backtests/performance-cumulative.csv', index=False)

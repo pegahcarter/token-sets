@@ -111,6 +111,3 @@ df_results['sum'] = df_results.drop(['wiggle_room', 'allocation'], axis=1).sum(a
 
 # Save dataframe
 df_results.to_csv('../backtests/performance-cumulative.csv', index=False)
-
-df = pd.read_csv('../backtests/performance-cumulative.csv')
-df
