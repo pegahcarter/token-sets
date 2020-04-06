@@ -1,4 +1,5 @@
 # Code to create signals
+import pandas as pd
 import numpy as np
 import itertools
 
@@ -24,4 +25,4 @@ def signals(src, rebalance, n_fast, n_mid, n_slow):
     _signals.update(zip(bull_indices, itertools.repeat('bull')))
     _signals.update(zip(bear_indices, itertools.repeat('bear')))
 
-    return _signals
+    return pd.Series(_signals)
