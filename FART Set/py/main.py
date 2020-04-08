@@ -10,10 +10,10 @@ from simulate import simulate
 # ------------------------------------------------------------------------------
 # VARIABLES
 
-# We want 150 day windows with 125 day overlap
+# We want 150 day windows with 100 day overlap
 # Since our dataframe is in hours, multiply by 24
 window_len = 24 * 150
-overlap = 24 * 125
+overlap = 24 * 100
 
 # Assets traded
 assets = ['ETH', 'USD']
@@ -53,7 +53,7 @@ def main():
     df['rebalance'] = is_rebalance(df['date'])
     df['signal'] = signals(df['ETH'], df['rebalance'], *moving_averages)
 
-    df.to_csv('backtests/signals.csv', index=False)
+    df.to_csv('../backtests/signals.csv', index=False)
 
     df = df.to_dict(orient='records')
     dfs = split_df(df, overlap, window_len)
@@ -85,7 +85,7 @@ def main():
     df_results['sum'] = df_results.drop(['wiggle_room', 'allocation'], axis=1).sum(axis=1)
 
     # Save dataframe
-    df_results.sort_values('sum', ascending=False).to_csv('backtests/performance.csv', index=False)
+    df_results.sort_values('sum', ascending=False).to_csv('../backtests/performance.csv', index=False)
 
 
 if __name__ == '__main__':
