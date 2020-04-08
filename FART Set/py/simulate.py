@@ -1,5 +1,5 @@
 # Simulate rebalancing
-from portfolio import Portfolio
+from .portfolio import Portfolio
 import numpy as np
 
 
