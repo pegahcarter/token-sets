@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from datetime import datetime
 
@@ -25,13 +26,26 @@ wiggle_room = 0.12
 
 # ------------------------------------------------------------------------------
 # Analysis
-df = pd.read_csv('backtests/signals.csv').to_dict(orient='records')
+# df_performance = pd.read_csv('backtests/performance.csv')
+# num_windows = len(df_performance.columns) - 1
 
 
-df_window = split_df(signals, overlap, window_len)[0]
-# for df_window in split_df(df, overlap, window_len)
-
-    rebalanced, eth, _ = simulate(assets, allocation, wiggle_room, df_window)
+df_signals = pd.read_csv('backtests/signals.csv').to_dict(orient='records')
 
 
-    test = pd.DataFrame({'Rebalanced Net Value': rebalanced, 'ETH Net Value': eth})
+fig = plt.figure(figsize=(20, 20))
+
+# df = split_df(df_signals, overlap, window_len)[0]
+for i, df in enumerate(split_df(df_signals, overlap, window_len)):
+
+    rebalanced, eth, _ = simulate(assets, allocation, wiggle_room, df)
+
+    results = pd.DataFrame({'Rebalanced Net Value': rebalanced, 'ETH Net Value': eth})
+
+    ax = fig.add_subplot(5, 3, i+1)
+    ax.plot(results)
+
+    ax.set_title(f"{df[0]['date'][:df[0]['date'].find(' ')]} - {df[-1]['date'][:df[-1]['date'].find(' ')]}")
+    ax.set_xticks([])
+
+plt.show()
