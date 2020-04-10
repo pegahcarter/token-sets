@@ -11,9 +11,9 @@ def simulate(assets, allocation, wiggle_room, df):
     eth_netval = []
     rebalanced_netval = []
 
-    for index, row in enumerate(df):
+    for row in df:
 
-        current_prices = [df[index][a] for a in assets]
+        current_prices = [row[a] for a in assets]
         dollar_values = portfolio.units * current_prices
         net_dollar_value = sum(dollar_values)
 
@@ -31,7 +31,7 @@ def simulate(assets, allocation, wiggle_room, df):
                 trade_units_after_slippage = [
                     (1-portfolio.SLIPPAGE)*t if t > 0 else t for t in trade_units
                 ]
-                portfolio.units += trade_units
+                portfolio.units += trade_units_after_slippage
 
         # Append net_dollar_value
         rebalanced_netval.append(net_dollar_value)
