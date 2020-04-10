@@ -25,9 +25,9 @@ allocation = {
 wiggle_room = 0.10
 
 drawdown_eth = []
-drawdown_rebalanced = []
+drawdown_fart = []
 end_pct_eth = []
-end_pct_rebalanced = []
+end_pct_fart = []
 
 
 df_signals = pd.read_csv('backtests/signals.csv').to_dict(orient='records')
@@ -58,18 +58,17 @@ def calc_end_pct(array):
 fig = plt.figure(figsize=(20, 20))
 
 
-df_signals_windows = split_df(df_signals, overlap, window_len)
-for i, df in enumerate(df_signals_windows):
+for i, df in enumerate(split_df(df_signals, overlap, window_len)):
 
-    rebalanced, eth, _ = simulate(assets, allocation, wiggle_room, df)
+    fart, eth, _ = simulate(assets, allocation, wiggle_room, df)
 
     # Append calculations
     drawdown_eth.append(calc_drawdown(eth))
-    drawdown_rebalanced.append(calc_drawdown(rebalanced))
+    drawdown_fart.append(calc_drawdown(fart))
     end_pct_eth.append(calc_end_pct(eth))
-    end_pct_rebalanced.append(calc_end_pct(rebalanced))
+    end_pct_fart.append(calc_end_pct(fart))
 
-    df_plot = pd.DataFrame({'Rebalanced Net Value ($)': rebalanced, 'ETH Net Value ($)': eth})
+    df_plot = pd.DataFrame({'FART Net Value ($)': fart, 'ETH Net Value ($)': eth})
 
     ax = fig.add_subplot(5, 3, i+1)
     ax.plot(df_plot)
@@ -83,11 +82,11 @@ plt.show()
 
 
 
-df_drawdown = pd.DataFrame({'ETH': drawdown_eth, 'Rebalanced': drawdown_rebalanced})
-print(f'Absolute Max Drawdown over 6 months: \n{df_drawdown.max()}')
+df_drawdown = pd.DataFrame({'ETH': drawdown_eth, 'FART': drawdown_fart})
+print(f'Absolute Max Drawdown over 6 months: \n{df_drawdown.max()}\n')
 
-print(f'Average Max Drawdown over 6 months: \n{df_drawdown.mean()}')
+print(f'Average Max Drawdown over 6 months: \n{df_drawdown.mean()}\n')
 
 
-df_end_pct = pd.DataFrame({'ETH': end_pct_eth, 'Rebalanced': end_pct_rebalanced})
-print(f'Average End Profit over 6 months: \n{df_end_pct.mean()}')
+df_end_pct = pd.DataFrame({'ETH': end_pct_eth, 'FART': end_pct_fart})
+print(f'Average End Profit over 6 months: \n{df_end_pct.mean()}\n')
