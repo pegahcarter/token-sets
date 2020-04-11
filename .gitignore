@@ -1,4 +1,10 @@
+# Configuration
+config.yaml
+
+
 # Javascript
+
+
 dist/
 node_modules/
 .DS_Store
@@ -16,6 +22,8 @@ blockchain/
 
 
 # Python
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
