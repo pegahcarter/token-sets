@@ -1,6 +1,7 @@
 import SetProtocol from 'setprotocol.js';
+import * as Web3 from 'web3';
 
-
+// Mainnet
 const config = {
   CommonValidationsLibrary: '0xC269E9396556B6AFB0C38eef4a590321FF9E8D3A',
   Core: '0xf55186CC537E7067EA616F2aaE007b4427a120C8',
