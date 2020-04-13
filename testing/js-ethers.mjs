@@ -3,11 +3,13 @@ const YAML = require('yaml');
 const fs = require('fs');
 const solc = require('solc');
 
-const apiAccessToken = ''
-const url = 'https://kovan.infura.io/v3/' + apiAccessToken
-const PUBLIC_KEY = "0x4279482C96F6Bb49e2D2deA33Ef3F5F03ca69a5d";
-const PRIVATE_KEY =
-  "E60EB404AE89C74B0CA87754B315FD15249A2A4B73B13451AD6D334615FEDDCF";
+const file = fs.readFileSync('./config.yaml', 'utf8')
+const env = YAML.parse(file)
+
+const PUBLIC_KEY = env['addresses']['demo']['PUBLIC_KEY']
+const PRIVATE_KEY = env['addresses']['demo']['PRIVATE_KEY']
+
+const INFURA_URL = env['INFURA']['kovan']['HTTPS'] + env['INFURA']['ID']
 
 const ABI = JSON.parse(fs.readFileSync('ABI_kovan.json', 'utf8'))
 let contractAddress = '0x00c6fc47a63e7e0408a2d7FFc308BDD038088cf3'
@@ -16,8 +18,8 @@ let contractAddress = '0x00c6fc47a63e7e0408a2d7FFc308BDD038088cf3'
 // Basic
 
 // Connect a wallet to Kovan
-// let provider = new ethers.providers.InfuraProvider("kovan", apiAccessToken);
-let provider = new ethers.providers.JsonRpcProvider(url);
+// let provider = new ethers.providers.InfuraProvider("kovan", env['INFURA']['ID']);
+let provider = new ethers.providers.JsonRpcProvider(INFURA_URL);
 
 let wallet = new ethers.Wallet(PRIVATE_KEY, provider);
 
