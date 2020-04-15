@@ -14,7 +14,7 @@ const PUBLIC_KEY = env['addresses']['demo']['PUBLIC_KEY']
 const PRIVATE_KEY = env['addresses']['demo']['PRIVATE_KEY']
 const INFURA_URL_HTTPS = env['INFURA']['kovan']['HTTPS'] + env['INFURA']['ID']
 const INFURA_URL_WS = env['INFURA']['kovan']['WS'] + env['INFURA']['ID']
-const KOVAN_CONFIG = env['configSetProtocol']['kovan']['config']
+const KOVAN_CONFIG = env['configSetProtocol']['kovan']
 
 let web3 = new Web3(new HDWalletProvider(PRIVATE_KEY, INFURA_URL_HTTPS));
 const setProtocol = new SetProtocol(web3, KOVAN_CONFIG)
