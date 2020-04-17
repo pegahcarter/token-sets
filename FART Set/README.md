@@ -18,7 +18,7 @@ FART can adjust weighting based on a bullish or bearish signal once per week.  T
 FART has a neutral weight of 50% Ethereum and 50% cDAI. Depending on the signal, % of Ethereum in the Set can range between 90% and 10%. ([1](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Allocation%20and%20Wiggle%20Room.ipynb))
 
 ### Description
-The goal of FART is to enable strategic exposure to Ethereum in which traders have the opportunity to capture a majority of an up market while providing lower volatility, lower risk and drawdown. ([3](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Analysis.ipynb))
+The goal of FART is to enable strategic exposure to Ethereum in which traders have the opportunity to capture a majority of an up market while providing lower volatility, lower risk and drawdown. ([2](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Analysis.ipynb))
 
 
 | Average Volatility % over 30 days ||
@@ -40,7 +40,7 @@ The goal of FART is to enable strategic exposure to Ethereum in which traders ha
 |FART| 34.47%|
 |**Change**| **-46.2%**|
 
-An additional objective of FART is to reduce risk of being stuck in an underperforming position, which would force the trader to sell at a loss. ([3](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Analysis.ipynb))
+An additional objective of FART is to reduce risk of being stuck in an underperforming position, which would force the trader to sell at a loss. ([2](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Analysis.ipynb))
 
 |Average probability of selling at a loss over 6 months||
 |--|--|
@@ -59,9 +59,9 @@ Interest earned from cDAI, performance fees, and streaming fees have not yet bee
 ### Improvements on FART Set vs. Robo Sets
 - When given a signal, FART can rebalance based on optimal weighting allocations determined from backtests. (1)
 
-- To guard against unnecessary rebalancing, when a similar should appear the following week rebalancing only occurs when current weightings are outside of the optimal allocation. ([1](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Allocation%20and%20Wiggle%20Room.ipynb))
+- To guard against unnecessary rebalancing, when a similar should appear the following week rebalancing only occurs when current weightings are outside of the optimal allocation. ([3](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Allocation%20and%20Wiggle%20Room.ipynb))
 
-- FART rebalances on the same day and hour each week, determined by the lowest average historic volatility.  Rebalancing at a stable price point lowers slippage and prevents a sudden change in signal. ([2](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Rebalance%20Day%20and%20Hour.ipynb))
+- FART rebalances on the same day and hour each week, determined by the lowest average historic volatility.  Rebalancing at a stable price point lowers slippage and prevents a sudden change in signal. ([3](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Rebalance%20Day%20and%20Hour.ipynb))
 
 
 
