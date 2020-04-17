@@ -10,7 +10,7 @@ const ccxt = require('ccxt');
 const sma = require('sma');
 const axios = require('axios');
 
-const file = fs.readFileSync('../config.yaml', 'utf8')
+const file = fs.readFileSync('./config.yaml', 'utf8')
 const env = YAML.parse(file)
 
 const PUBLIC_KEY = env['addresses']['mainnet']['PUBLIC_KEY']
