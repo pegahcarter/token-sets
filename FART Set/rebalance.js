@@ -15,6 +15,7 @@ const env = YAML.parse(file)
 
 const PUBLIC_KEY = env['addresses']['mainnet']['PUBLIC_KEY']
 const PRIVATE_KEY = env['addresses']['mainnet']['PRIVATE_KEY']
+const SET_API_KEY = env['setProtocol']['API_KEY']
 const MANAGER_ADDRESS = env['setProtocol']['MANAGER']
 const TRADING_POOL_ADDRESS = env['setProtocol']['TRADING_POOL']
 const INFURA_URL_HTTPS = env['INFURA']['mainnet']['HTTPS'] + env['INFURA']['ID']
@@ -70,18 +71,19 @@ const CoinGeckoClient = new CoinGecko();
         },
         data: {
           transaction_hash: txHash,
-          text: `Signal: "${signal}".  Adjusting ETH allocation to ${(signalAllocation*100).toFixed(0)}%.`
+          text: 'Signal: "' + signal + '".  Adjusting ETH allocation to '+ (signalAllocation*100).toFixed(0) + '%.'
         }
       }
       // Post rebalance to Token Sets Feed
       await axios(axiosConfig);
     }
-
-    return true;
   } else {
     console.log('No rebalance needed');
-    return false;
   }
+
+  // End
+  process.exit(0)
+
 })()
 
 
