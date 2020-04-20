@@ -8,4 +8,9 @@ def is_rebalance(dates, day='Saturday', hour=10):
     is_day = pd.DatetimeIndex(dates).day_name() == day
     is_hour = pd.to_datetime(dates).apply(lambda x: x.hour == hour and x.minute == 0)
 
-    return is_day & is_hour
+    if day is None:
+        return is_hour
+    elif hour is None:
+        return is_day
+    else:
+        return is_day & is_hour
