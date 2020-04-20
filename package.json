@@ -20,8 +20,30 @@
   },
   "homepage": "https://github.com/carlfarterson/token-sets#readme",
   "dependencies": {
+    "@truffle/hdwallet-provider": "^1.0.34",
+    "axios": "^0.19.2",
     "bignumber.js": "^5.0.0",
+    "ccxt": "^1.26.26",
+    "coingecko-api": "^1.0.10",
+    "ens": "0.0.1",
+    "human-standard-token-abi": "^2.0.0",
+    "mathjs": "^6.6.3",
     "setprotocol.js": "^1.2.8-rc4",
-    "web3": "^1.2.6"
+    "sha3": "^2.1.2",
+    "sma": "^0.1.1",
+    "solc": "^0.6.6",
+    "solium": "^1.2.5",
+    "truffle": "^5.1.21",
+    "tslint": "^6.1.1",
+    "typescript": "^3.8.3",
+    "web3": "^1.2.6",
+    "yaml": "^1.8.3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0"
   }
 }
