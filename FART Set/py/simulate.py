@@ -3,7 +3,7 @@ from .portfolio import Portfolio
 import numpy as np
 
 
-def simulate(assets, allocation, wiggle_room, df):
+def simulate(assets, allocation, wiggle_room, df, interval='weekly'):
 
     start_prices = [df[0][a] for a in assets]
     portfolio = Portfolio(assets, start_prices)
@@ -18,7 +18,7 @@ def simulate(assets, allocation, wiggle_room, df):
         net_dollar_value = sum(dollar_values)
 
         # Rebalance if needed to
-        if row['rebalance']:
+        if row[f'rebalance_{interval}']:
             weights_current = dollar_values / net_dollar_value
             weights_preferred = allocation[row['signal']]
 
