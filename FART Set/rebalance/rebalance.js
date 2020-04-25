@@ -1,3 +1,5 @@
+// Live code used to rebalance FART Set
+// https://www.tokensets.com/set/fart-1
 const BigNumber = require('bignumber.js');
 const Web3 = require('web3');
 const YAML = require('yaml');
