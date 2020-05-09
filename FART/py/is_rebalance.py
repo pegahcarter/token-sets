@@ -3,14 +3,49 @@ import pandas as pd
 
 
 # NOTE: default day and hour determined from `Determine Rebalance Day and Hour.ipynb`
-def is_rebalance(dates, day='Saturday', hour=10):
+def is_rebalance(dates):
 
-    is_day = pd.DatetimeIndex(dates).day_name() == day
-    is_hour = pd.to_datetime(dates).apply(lambda x: x.hour == hour and x.minute == 0)
+    _dates = pd.DatetimeIndex(dates)
 
-    if day is None:
-        return is_hour
-    elif hour is None:
-        return is_day
-    else:
-        return is_day & is_hour
+    # 1. Rebalance once/day
+    once_day = list(map(lambda x: x.hour == 1 and x.minute == 0, _dates))
+    
+
+    # 2. Rebalance once/week
+    once_week = (_dates.day_name() == 'Saturday') & (once_day)
+
+
+    # 3. Rebalance once/month
+    month_set = set(range(1, 13))
+    once_month = []
+
+    for hr, week in zip(_dates, once_week):
+        if hr.month == 1 and 12 not in month_set:
+            month_set = set(range(1, 13))
+        
+        if (hr.month in month_set) and (week):
+            month_set.remove(hr.month)
+            once_month.append(True)
+        else:
+            once_month.append(False)
+
+
+    # 4. Rebalance once/quarter
+    quarter_set = set([1, 4, 7, 10])
+    once_quarter = []
+
+    for month in once_month:
+        if hr.month == 1 and 10 not in quarter_set:
+            quarter_set = set([1, 4, 7, 10])
+        
+        if (hr.month in quarter_set) and (once_month):
+            quarter_set.remove(hr.month)
+            once_quarter.append(True)
+        else:
+            once_quarter.append(False)
+
+
+    # 5. Rebalance never!
+    once_never = [False for _ in _dates]
+
+    return once_day, once_week, once_month, once_quarter, once_never
