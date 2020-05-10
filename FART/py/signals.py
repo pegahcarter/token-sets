@@ -1,7 +1,7 @@
 # Code to create signals
 import pandas as pd
 import numpy as np
-from .is_rebalance import is_rebalance
+from is_rebalance import is_rebalance
 
 
 def signals(dates, prices, n_1=50, n_2=100, n_3=200):
@@ -16,9 +16,12 @@ def signals(dates, prices, n_1=50, n_2=100, n_3=200):
     _is_rebalance = is_rebalance(dates)
     data = np.insert(_is_rebalance, 0, [bullish, bearish], axis=1)
     
-    return pd.DataFrame(
+    _signals = pd.DataFrame(
         index=dates,
         data=data,
         columns=['Bullish', 'Bearish', 'Daily', 'Weekly', 'Monthly', 'Quarterly', 'Never']
     )
 
+    _signals.to_csv('/home/carter/Documents/token-sets/FART/backtests/signals.csv')
+
+    return

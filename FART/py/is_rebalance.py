@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 
+
 # NOTE: default day and hour determined from `Determine Rebalance Day and Hour.ipynb`
 def is_rebalance(dates):
 
