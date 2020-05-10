@@ -1,5 +1,6 @@
 # Add boolean value to rebalance based on day and hour
 import pandas as pd
+import numpy as np
 
 
 # NOTE: default day and hour determined from `Determine Rebalance Day and Hour.ipynb`
@@ -38,7 +39,7 @@ def is_rebalance(dates):
         if hr.month == 1 and 10 not in quarter_set:
             quarter_set = set([1, 4, 7, 10])
         
-        if (hr.month in quarter_set) and (once_month):
+        if (hr.month in quarter_set) and (month):
             quarter_set.remove(hr.month)
             once_quarter.append(True)
         else:
@@ -48,4 +49,8 @@ def is_rebalance(dates):
     # 5. Rebalance never!
     once_never = [False for _ in _dates]
 
-    return once_day, once_week, once_month, once_quarter, once_never
+    
+    # Transpose to later pipeline into DataFrame
+    t = np.transpose([once_day, once_week, once_month, once_quarter, once_never])
+
+    return t
