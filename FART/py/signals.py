@@ -1,28 +1,24 @@
 # Code to create signals
 import pandas as pd
 import numpy as np
-import itertools
-
-from TAcharts.indicators import sma
-from TAcharts.utils import apply_across
+from .is_rebalance import is_rebalance
 
 
-def signals(src, rebalance, n_fast, n_mid, n_slow):
+def signals(dates, prices, n_1=50, n_2=100, n_3=200):
 
-    ma_fast = sma(src, n=n_fast)
-    ma_mid = sma(src, n=n_mid)
-    ma_slow = sma(src, n=n_slow)
+    m1 = prices.rolling(n_1).mean().fillna(0)
+    m2 = prices.rolling(n_2).mean().fillna(0)
+    m3 = prices.rolling(n_3).mean().fillna(0)
 
-    bull = (ma_fast > ma_mid) & (ma_mid > ma_slow)
-    bear = (ma_fast < ma_mid) & (ma_mid < ma_slow)
+    bullish = (m1 > m2) & (m2 > m3)
+    bearish = (m1 < m2) & (m2 < m3)
 
-    rebalance_indices = np.flatnonzero(rebalance)
-    bull_indices = np.flatnonzero(apply_across(rebalance, bull, fn='min'))
-    bear_indices = np.flatnonzero(apply_across(rebalance, bear, fn='min'))
+    _is_rebalance = is_rebalance(dates)
+    data = np.insert(_is_rebalance, 0, [bullish, bearish], axis=1)
+    
+    return pd.DataFrame(
+        index=dates,
+        data=data,
+        columns=['Bullish', 'Bearish', 'Daily', 'Weekly', 'Monthly', 'Quarterly', 'Never']
+    )
 
-    _signals = dict(zip(rebalance_indices, itertools.repeat('neutral')))
-
-    _signals.update(zip(bull_indices, itertools.repeat('bull')))
-    _signals.update(zip(bear_indices, itertools.repeat('bear')))
-
-    return pd.Series(_signals)
