@@ -20,8 +20,6 @@ Neutrally, FART will remain with a 50% ETH / 50% cDAI weighting.  In a week of a
 
 The backtests I've written to determine optimal portfolio weighting can be found [HERE].
 
-FART has a neutral weight of 50% Ethereum and 50% cDAI. Depending on the signal, % of Ethereum in the Set can range between 90% and 10%. ([1](https://github.com/carlfarterson/token-sets/blob/master/FART%20Set/Determining%20Allocation%20and%20Wiggle%20Room.ipynb))
-
 ### Performance
 
 | Average Volatility % over 30 days |            |
