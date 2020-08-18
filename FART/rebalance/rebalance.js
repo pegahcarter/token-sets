@@ -22,16 +22,17 @@ const MANAGER_ADDRESS = env['setProtocol']['MANAGER']
 const TRADING_POOL_ADDRESS = env['setProtocol']['TRADING_POOL']
 const INFURA_URL_HTTPS = env['INFURA']['mainnet']['HTTPS'] + env['INFURA']['ID']
 const MAINNET_CONFIG = env['setProtocol']['mainnet']
+
+let web3 = new Web3(new HDWalletProvider(PRIVATE_KEY, INFURA_URL_HTTPS));
+const setProtocol = new SetProtocol(web3, MAINNET_CONFIG);
+const CoinGeckoClient = new CoinGecko();
+
 const wiggleRoom = 0.1
 const allocations = {
   'bull': 0.9,
   'neutral': 0.5,
   'bear': 0.1
 };
-
-let web3 = new Web3(new HDWalletProvider(PRIVATE_KEY, INFURA_URL_HTTPS));
-const setProtocol = new SetProtocol(web3, MAINNET_CONFIG);
-const CoinGeckoClient = new CoinGecko();
 
 
 ;(async () => {
