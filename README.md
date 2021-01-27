@@ -1,5 +1,5 @@
 # Token-sets
-## By: Carter Carlson
+## By: Carl Farterson
 
 ### Introduction
 This repository contains all code used with [Token Sets](https://tokensets.com).
