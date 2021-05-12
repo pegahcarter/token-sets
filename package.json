@@ -27,7 +27,7 @@
     "coingecko-api": "^1.0.10",
     "ens": "0.0.1",
     "human-standard-token-abi": "^2.0.0",
-    "mathjs": "^6.6.3",
+    "mathjs": "^7.5.1",
     "setprotocol.js": "^1.2.8-rc4",
     "sha3": "^2.1.2",
     "sma": "^0.1.1",
