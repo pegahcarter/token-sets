@@ -21,7 +21,7 @@
   "homepage": "https://github.com/carlfarterson/token-sets#readme",
   "dependencies": {
     "@truffle/hdwallet-provider": "^1.0.34",
-    "axios": "^0.19.2",
+    "axios": "^1.6.0",
     "bignumber.js": "^5.0.0",
     "ccxt": "^1.26.26",
     "coingecko-api": "^1.0.10",
